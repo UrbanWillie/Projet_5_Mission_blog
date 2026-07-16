@@ -176,4 +176,38 @@ class AdminController {
         // On redirige vers la page d'administration.
         Utils::redirect("admin");
     }
+
+    //new method show statistics 
+    public function showStatistics() : void
+    {
+        $this->checkIfUserIsConnected();
+
+        $sort = Utils::request("sort", "title");
+        $order = Utils::request("order", "ASC");
+
+        $articleManager = new ArticleManager();
+        $articles = $articleManager->getStatistics($sort, $order);
+
+        $view = new View("Statistiques");
+        $view->render("statistics", [
+            "articles" => $articles
+        ]);
+    }
+
+    //new method to delete a comment
+    public function deleteComment() : void
+    {
+        $this->checkIfUserIsConnected();
+
+        $id = Utils::request("id");
+
+        $commentManager = new CommentManager();
+        $comment = $commentManager->getCommentById($id);
+
+        if ($comment) {
+            $commentManager->deleteComment($comment);
+        }
+
+        Utils::redirect("statistics");
+    }
 }

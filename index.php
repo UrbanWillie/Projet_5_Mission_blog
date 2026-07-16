@@ -74,6 +74,18 @@ try {
             $adminController->deleteArticle();
             break;
 
+        //new administration page
+        case 'showStatistics':
+            $adminController = new AdminController();
+            $adminController->showStatistics();
+            break;
+
+        //new method to delete a comment
+        case 'deleteComment':
+            $adminController = new AdminController();
+            $adminController->deleteComment();
+            break;
+
         default:
             throw new Exception("La page demandée n'existe pas.");
     }

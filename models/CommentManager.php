@@ -39,6 +39,22 @@ class CommentManager extends AbstractEntityManager
     }
 
     /**
+     * Incrémente le nombre de vues d'un article.
+     * @param int $id
+     * @return void
+     */
+    public function incrementViewCount(int $id) : void
+    {
+        $sql = "UPDATE article
+                SET view_count = view_count + 1
+                WHERE id = :id";
+
+        $this->db->query($sql, [
+            'id' => $id
+        ]);
+    }
+
+    /**
      * Ajoute un commentaire.
      * @param Comment $comment : l'objet Comment à ajouter.
      * @return bool : true si l'ajout a réussi, false sinon.

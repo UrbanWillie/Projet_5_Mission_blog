@@ -38,6 +38,22 @@ class ArticleManager extends AbstractEntityManager
     }
 
     /**
+     * Incrémente le nombre de vues d'un article.
+     * @param int $id
+     * @return void
+     */
+    public function incrementViewCount(int $id) : void
+    {
+        $sql = "UPDATE article
+                SET view_count = view_count + 1
+                WHERE id = :id";
+
+        $this->db->query($sql, [
+            'id' => $id
+        ]);
+    }
+
+    /**
      * Ajoute ou modifie un article.
      * On sait si l'article est un nouvel article car son id sera -1.
      * @param Article $article : l'article à ajouter ou modifier.
@@ -59,7 +75,7 @@ class ArticleManager extends AbstractEntityManager
      */
     public function addArticle(Article $article) : void
     {
-        $sql = "INSERT INTO article (id_user, title, content, date_creation) VALUES (:id_user, :title, :content, NOW())";
+        $sql = "INSERT INTO article (id_user, title, content, view_count, date_creation) VALUES (:id_user, :title, :content, 0, NOW())";
         $this->db->query($sql, [
             'id_user' => $article->getIdUser(),
             'title' => $article->getTitle(),
@@ -91,5 +107,40 @@ class ArticleManager extends AbstractEntityManager
     {
         $sql = "DELETE FROM article WHERE id = :id";
         $this->db->query($sql, ['id' => $id]);
+    }
+
+    // new method to get statistics about articles and comments
+    public function getStatistics(string $sort, string $order) : array
+    {
+        $allowedSort = [
+            'title' => 'a.title',
+            'date_creation' => 'a.date_creation',
+            'view_count' => 'a.view_count',
+            'comment_count' => 'comment_count'
+        ];
+
+        $sort = $allowedSort[$sort] ?? 'a.title';
+
+        $order = strtoupper($order);
+
+        if ($order !== 'ASC' && $order !== 'DESC') {
+            $order = 'ASC';
+        }
+
+        $sql = "SELECT a.*, COUNT(c.id) as comment_count
+                FROM article a
+                LEFT JOIN comment c ON a.id = c.id_article
+                GROUP BY a.id
+                ORDER BY $sort $order";
+
+        $result = $this->db->query($sql);
+
+        $articles = [];
+
+        while ($article = $result->fetch()) {
+            $articles[] = new Article($article);
+        }
+
+        return $articles;
     }
 }
