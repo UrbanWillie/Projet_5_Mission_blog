@@ -118,6 +118,7 @@ form .formGrid .submit {
 .foldedCorner {
     position: relative;
     overflow: hidden;
+    margin-bottom: 20px;
 } 
 
 .foldedCorner::before {
@@ -349,4 +350,50 @@ footer {
     padding: 20px;
     color: white;
     background-color: var(--headerColor);
+}
+
+/**
+* Styles de la page de statistiques
+*/ 
+.statisticsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.statisticsTable th,
+.statisticsTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.statisticsTable th {
+    background-color: #a4a83d;
+    color: white;
+}
+
+.statisticsTable tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.statisticsTable tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.statisticsTable a {
+    color: white;
+    text-decoration: none;
+}
+
+.statisticsTable a:hover {
+    text-decoration: underline;
+
+}
+
+.adminButtons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }

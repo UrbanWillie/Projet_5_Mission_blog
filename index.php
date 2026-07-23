@@ -86,6 +86,23 @@ try {
             $adminController->deleteComment();
             break;
 
+        //new monitoring page
+        case 'statistics':
+            $adminController = new AdminController();
+            $adminController->showStatistics();
+            break;
+
+        //new monitoring page for comments
+        case 'commentStatistics':
+            $adminController = new AdminController();
+            $adminController->showCommentStatistics();
+            break;
+
+        case 'deleteComment':
+            $adminController = new AdminController();
+            $adminController->deleteComment();
+            break;
+
         default:
             throw new Exception("La page demandée n'existe pas.");
     }

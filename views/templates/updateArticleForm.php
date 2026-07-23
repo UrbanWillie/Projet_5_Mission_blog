@@ -17,6 +17,12 @@
     </div>
 </form>
 
+<div class="adminButtons">
+    <a class="submit" href="index.php?action=admin">
+        ← Annuler
+    </a>
+</div>
+
 <script>
 
     

@@ -188,9 +188,11 @@ class AdminController {
         $articleManager = new ArticleManager();
         $articles = $articleManager->getStatistics($sort, $order);
 
-        $view = new View("Statistiques");
+        $view = new View("Monitoring");
         $view->render("statistics", [
-            "articles" => $articles
+            "articles" => $articles,
+            "sort" => $sort,
+            "order" => $order
         ]);
     }
 
@@ -209,5 +211,24 @@ class AdminController {
         }
 
         Utils::redirect("statistics");
+    }
+
+    //new method to show comment statistics
+    public function showCommentStatistics() : void
+    {
+        $this->checkIfUserIsConnected();
+
+        $sort = Utils::request('sort', 'date_creation');
+        $order = Utils::request('order', 'DESC');
+
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getStatistics($sort, $order);
+
+        $view = new View("Monitoring des commentaires");
+        $view->render("commentStatistics", [
+            'comments' => $comments,
+            'sort' => $sort,
+            'order' => $order
+        ]);
     }
 }

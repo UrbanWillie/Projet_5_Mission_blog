@@ -82,4 +82,40 @@ class CommentManager extends AbstractEntityManager
         return $result->rowCount() > 0;
     }
 
+    /**
+     * Récupère les statistiques des articles.
+     * @param string $sort : le champ par lequel trier les résultats.
+     * @param string $order : l'ordre de tri (ASC ou DESC).
+     * @return array : un tableau d'objets Comment avec le titre de l'article associé.
+     */
+    public function getStatistics(string $sort, string $order) : array
+    {
+        $allowedSort = [
+            'title' => 'a.title',
+            'pseudo' => 'c.pseudo',
+            'content' => 'c.content',
+            'date_creation' => 'c.date_creation'
+        ];
+
+        $sort = $allowedSort[$sort] ?? 'c.date_creation';
+
+        $order = strtoupper($order);
+
+        if ($order != 'ASC' && $order != 'DESC') {
+            $order = 'DESC';
+        }
+
+        $sql = "
+            SELECT
+                c.*,
+                a.title
+            FROM comment c
+            INNER JOIN article a
+                ON c.id_article = a.id
+            ORDER BY $sort $order
+        ";
+
+        return $this->db->query($sql)->fetchAll();
+    }
+
 }
